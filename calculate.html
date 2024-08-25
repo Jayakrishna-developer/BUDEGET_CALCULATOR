@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="style.css">
+
+    <style>
+      body {
+        background: linear-gradient(
+          to right,
+          #a2c2e9,
+          #b6f0d1
+        ); /* Soft blue to pale teal gradient */
+        font-family: "Poppins", sans-serif;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+      }
+
+      nav ul {
+        display: flex;
+        justify-content: space-between;
+        text-decoration: none;
+        font-size: 30px;
+        font-weight: 700;
+        padding: 0;
+       
+        color: #333;
+      }
+      #contain {
+        background: linear-gradient(
+          135deg,
+          #dcf5bd,
+          #a3d99d
+        ); /* Light Green to Soft Olive */
+   
+      }
+
+      .container h3 {
+        color: rgb(3, 131, 80);
+        font-size: 1.5rem;
+        font-family: "Merriweather", serif;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 800;
+      }
+      .form-add-income {
+        background: linear-gradient(
+          to right,
+          #d4fc79,
+          #96e6a1
+        ); /* Light green gradient for Add Income */
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-add-expense {
+        background: linear-gradient(
+          to right,
+          #ff9a9e,
+          #fad0c4
+        ); /* Pink gradient for Add Expense */
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-add-income .btn-primary {
+        background-color: #28a745; /* Green color for Add Income */
+        border-color: #28a745;
+      }
+
+      .form-add-income .btn-primary:hover {
+        background-color: #218838; /* Darker green for hover effect */
+        border-color: #1e7e34;
+      }
+
+      .form-add-expense .btn-primary {
+        background-color: #dc3545; /* Red color for Add Expense */
+        border-color: #dc3545;
+      }
+
+      .form-add-expense .btn-primary:hover {
+        background-color: #c82333; /* Darker red for hover effect */
+        border-color: #bd2130;
+      }
+
+      .form-control {
+        border: 1px solid #ced4da;
+        transition: border-color 0.3s, box-shadow 0.3s;
+      }
+
+      .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+      }
+
+      ::placeholder {
+        color: #adb5bd;
+        opacity: 1;
+      }
+
+      /* Themed Placeholders and Labels */
+      .form-add-income .form-label {
+        color: #28a745; /* Green label color */
+      }
+
+      .form-add-income ::placeholder {
+        color: #1e7e34; /* Darker green for placeholders */
+      }
+
+      .form-add-expense .form-label {
+        color: #dc3545; /* Red label color */
+      }
+
+      .form-add-expense ::placeholder {
+        color: #c82333; /* Darker red for placeholders */
+      }
+      #balance {
+        background: linear-gradient(135deg, #6dd5ed, #2193b0);
+        height: 150px;
+        margin-left: -150px;
+        border-radius: 20px;
+      }
+      #balance h4 {
+        text-align: center;
+        color: black;
+        font-family: "Roboto Mono", monospace;
+        font-weight: 700;
+      }
+      #expense {
+        background: linear-gradient(135deg, #f2994a, #f2c94c);
+        height: 150px;
+        margin-left: 330px;
+        border-radius: 20px;
+      }
+      #expense h4 {
+        text-align: center;
+        color: black;
+        font-family: "Roboto Mono", monospace;
+        font-weight: 700;
+      }
+      @media screen and (min-width: 992px) and (max-width: 1199px) {
+        #expense {
+          margin-left: 280px;
+        }
+      }
+        @media screen and (min-width: 490px) and (max-width: 768px) {
+          #chart button{
+           margin-left: 170px;
+           
+          }
+      }
+        @media screen and (min-width: 390px) and (max-width: 490px) {
+          #chart button{
+           margin-left: 130px;
+           
+          }}
+             @media screen and (min-width: 300px) and (max-width: 390px) {
+          #chart button{
+           margin-left: 80px;
+           
+          }}
+      @media screen and (min-width: 768px) and (max-width: 992px) {
+         #chart button{
+           margin-left: 270px;
+          }
+        #details th {
+          padding: 0 45px !important;
+          font-size: 2.3vw !important;
+        }
+        #expense {
+          margin-left: 130px;
+        }
+        nav ul {
+          font-size: 2vw;
+        }
+        #balance {
+          margin-left: -60px;
+        }
+      }
+      @media screen and (min-width: 539px) and (max-width: 575px) {
+        #expense {
+          margin-left: 20px;
+        }
+        nav ul {
+          font-size: 3vw;
+        }
+        #balance {
+          margin-left: 35px;
+        }
+      }
+      @media screen and (min-width: 360px) and (max-width: 500px) {
+            nav li .btn{
+            padding: 0px 15px !important;
+          font-size: 15px !important;
+                  font-weight: 600;
+          }
+        #income_table tr td {
+          font-size: 2vw;
+        }
+        #expense_table tr td {
+          font-size: 2vw;
+        }
+        #details th {
+          padding: 0 17px !important;
+          font-size: 3vw !important;
+        }
+      }
+      @media screen and (min-width: 250px) and (max-width: 360px) {
+        #details th {
+          padding: 0 5px !important;
+          font-size: 3vw !important;
+        }
+      }
+      @media screen and (min-width: 500px) and (max-width: 575px) {
+            nav li .btn{
+            padding: 5px 15px !important;
+          font-size: 15px !important;
+                  font-weight: 600;
+          }
+        #income_table tr td {
+          font-size: 3vw;
+        }
+        #expense_table tr td {
+          font-size: 3vw;
+        }
+        #details th {
+          padding: 0 22px !important;
+          font-size: 3vw !important;
+        }
+      }
+
+      @media screen and (min-width: 575px) and (max-width: 768px) {
+            nav li .btn{
+            padding: 5px 15px !important;
+          font-size: 16px !important;
+                  font-weight: 600;
+          }
+        #details th {
+          padding: 0 30px !important;
+          font-size: 2vw !important;
+        }
+
+        #expense {
+          margin-left: 65px;
+        }
+        nav ul {
+          font-size: 2vw;
+        }
+        #balance {
+          margin-left: 60px;
+        }
+      }
+
+      @media screen and (min-width: 450px) and (max-width: 500px) {
+        #income_table tr td {
+          font-size: 3vw;
+        }
+        #expense_table tr td {
+          font-size: 3vw;
+        }
+      }
+
+      @media screen and (min-width: 315px) and (max-width: 450px) {
+        nav li .btn{
+            padding: 0px 15px !important;
+          font-size: 15px !important;
+                  font-weight: 600;
+          }
+        #income_table tr td {
+          font-size: 2.5vw;
+        }
+        #expense_table tr td {
+          font-size: 2.5vw;
+        }
+      }
+      @media screen and (min-width: 100px) and (max-width: 539px) {
+        nav ul {
+          font-size: 4vw;
+        }
+
+        #expense {
+          margin-left: 20px;
+        }
+        #balance {
+          margin-left: 20px;
+        }
+      }
+      hr {
+        color: black;
+      }
+      .clear {
+        text-align: center;
+        margin-top: 50px;
+      }
+      .clear button {
+        margin-bottom: 100px;
+        border-radius: 10px;
+        background-color: yellow;
+        padding: 10px;
+        font-weight: 700;
+      }
+      .clear button:hover {
+        scale: 1.07;
+        box-shadow: 0 0 3px black;
+        color: rgb(107, 179, 7);
+      }
+      h2 {
+        text-align: center;
+        font-weight: 500;
+        font-family: "Libre Baskerville", serif;
+        color: #023108;
+      }
+      #details hr {
+        color: #bd2130;
+        height: 1.5px;
+      }
+      #details {
+        padding-bottom: 100px;
+      }
+      #details th {
+        padding: 0 35px;
+        font-size: 20px;
+        border-bottom: 4px solid rgb(181, 172, 76);
+      }
+      .table-warning {
+        background-color: beige;
+      }
+      #details .row h2 {
+        font-family: "Courier New", monospace;
+        font-weight: 700;
+        color: black;
+      }
+
+      @media screen and (min-width: 1199px) and (max-width: 1400px) {
+        #details th {
+          padding: 0 20px;
+        }
+      }
+        @media screen and (min-width: 1400px) and (max-width: 1600px) {
+          #chart button{
+           margin-left: 550px;
+           margin-top: -200px;
+          }
+        }
+          @media screen and (min-width: 1200px) and (max-width: 1400px) {
+          #chart button{
+           margin-left: 480px;
+           margin-top: -200px;
+          }
+      }
+
+      @media screen and (min-width: 992px) and (max-width: 1200px) {
+        #chart button{
+           margin-left: 400px;
+           margin-top: -250px;
+          }
+        #details th {
+          padding: 0 10px;
+        }
+      }
+      #total_balance,
+      #total_expense {
+        text-align: center;
+        font-family: "Courier New", monospace;
+        color: white;
+        font-weight: 700;
+        font-size: 20px;
+      }
+      #income_table tr td {
+        border-bottom: 2px solid rgb(50, 160, 140);
+
+        font-weight: 700;
+        font-family: "Courier New", monospace;
+      }
+      #expense_table tr td {
+        border-bottom: 2px solid rgb(50, 160, 140);
+        font-weight: 700;
+        font-family: "Courier New", monospace;
+      }
+      @media screen and (min-width: 730px) and (max-width: 768px) {
+         #chart button{
+           margin-left: 200px;
+          }
+        #income_table tr td {
+          font-size: 2vw;
+        }
+        #expense_table tr td {
+          font-size: 2vw;
+        }
+      }
+      @media screen and (min-width: 768px) and (max-width: 800px) {
+         #chart button{
+           margin-left: 270px;
+          }
+        #income_table tr td {
+          font-size: 2vw;
+        }
+        #expense_table tr td {
+          font-size: 2vw;
+        }
+      }
+      @media screen and (min-width: 912px) and (max-width: 1000px) {
+        #income_table tr td {
+          font-size: 1.5vw;
+        }
+        #expense_table tr td {
+          font-size: 1.5vw;
+        }
+      }
+
+      #chart h2{
+        margin-bottom:10px ;
+      }
+      #chart {
+          padding-bottom: 300px;
+           
+          }
+          #head{
+            text-align: center;
+            font-family: "Courier New", monospace;
+            font-weight: 500;
+            text-shadow: 1px 1px 1px black;
+          }
+          nav li .btn{
+            padding: 7px 15px;
+                  font-family: "Courier New", monospace;
+                  color:red;
+                  border-color: red !important;
+                  border-radius: 10px;
+                  background-color: transparent;
+                  border: 3px solid red;
+                  font-weight: 600;
+          }
+           nav li .btn:hover{
+            scale: 1.02;
+            color: red !important;
+            border:4px ridge red !important;
+           }
+    </style>
+  </head>
+  <body>
+    <h1 id="head">BUDGET CALCULATOR</h1>
+    <div id="contain" class="container">
+      <nav>
+        <ul type="none">
+          <li id="name"><i class="fa-solid fa-user-tie fa-bounce"></i>WELCOME</li>
+          <li><button class="btn fs-5" onclick="logout()">LogOut<i class="fa-solid fa-power-off fa-beat-fade" style="color: #ff0000;"></i></button></li>
+        </ul>
+      </nav>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-2"></div>
+          <div id="balance" class="col-lg-3 col-md-4 col-sm-4 col-5 mt-5">
+            <h4>TOTAL BALANCE</h4>
+            <hr />
+            <p id="total_balance"></p>
+          </div>
+
+          <div id="expense" class="col-lg-3 col-md-4 col-sm-4 col-5 mt-5">
+            <h4>TOTAL EXPENSE</h4>
+            <hr />
+            <p id="total_expense"></p>
+          </div>
+          <div class="col-lg-3 col-md-2"></div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-12 mt-5">
+            <h3>ADD EXPENSE</h3>
+            <hr />
+            <form class="form-add-income">
+              <div class="mb-3">
+                <label for="addIncomeype" class="form-label"
+                  >Enter Income Type</label
+                >
+                <select class="form-control" id="addincometype" required>
+                  <option value="" disabled selected>Select income type</option>
+                  <option value="Housing">Housing</option>
+                  <option value="Food">Food</option>
+                  <option value="Transportation">Transportation</option>
+                  <option value="Education">Education</option>
+                  <option value="Personal and Family">
+                    Personal and Family
+                  </option>
+                  <option value="Health Care">Health Care</option>
+                  <option value="Savings and Investments">
+                    Savings and Investments
+                  </option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="addAmount" class="form-label">Enter Amount</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="add_income_amount"
+                  placeholder="Enter amount"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                onclick="addincome()"
+                class="btn btn-primary w-100"
+              >
+                Add Income
+              </button>
+            </form>
+          </div>
+          <div class="col-lg-6 col-md-6 col-12 mt-5">
+            <h3>ENTER EXPENSE</h3>
+            <hr />
+            <form class="form-add-expense">
+              <div class="mb-3">
+                <label for="enterExpenseType" class="form-label"
+                  >Enter Expense Type</label
+                >
+                <select class="form-control" id="addexpensetype" required>
+                  <option value="" disabled selected>
+                    Select expense type
+                  </option>
+                  <option value="Housing">Housing</option>
+                  <option value="Food">Food</option>
+                  <option value="Transportation">Transportation</option>
+                  <option value="Education">Education</option>
+                  <option value="Personal and Family">
+                    Personal and Family
+                  </option>
+                  <option value="Health Care">Health Care</option>
+                  <option value="Savings and Investments">
+                    Savings and Investments
+                  </option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="enterAmount" class="form-label">Enter Amount</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="add_expense_amount"
+                  placeholder="Enter amount"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                onclick="addexpense()"
+                class="btn btn-primary w-100"
+              >
+                Add Expense
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="clear">
+        <button type="submit" onclick="clearall()">Clear All <i class="fa-solid fa-eraser"></i></button>
+      </div>
+      <div class="container" id="details">
+        <h2>INCOME AND EXPENSE DETAILS</h2>
+        <hr />
+        <div class="row">
+          <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+            <h2>INCOME</h2>
+            <table class="table-warning bg-light">
+              <thead>
+                <tr class="table-warning">
+                  <th scope="col">Type</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Balance</th>
+                  <th scope="col">Date&Time</th>
+                </tr>
+              </thead>
+              <tbody id="income_table"></tbody>
+            </table>
+          </div>
+
+          <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+            <h2>EXPENSE</h2>
+            <table class="table-warning bg-light">
+              <thead>
+                <tr class="table-warning">
+                  <th scope="col">Type</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Balance</th>
+                  <th scope="col">Date&Time</th>
+                </tr>
+              </thead>
+              <tbody id="expense_table"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="container ">
+        <div class="row">
+            
+            <div class="col" id="chart">
+               <h2>EXPENSE PIE-CHART</h2>
+                  <button onclick="displaychart()" class="btn btn-primary text-white  ">Show Pie-Chart</button>
+                     <canvas class="mx-auto" id="piechart"></canvas>
+            </div>
+        </div>
+      </div>
+    </div>
+
+
+    
+    <script>
+      let key = localStorage.getItem("username");
+      console.log(key);
+      let user_data = JSON.parse(localStorage.getItem(key)) || {
+        income: 0,
+        expense: 0,
+      }; // Default values if not set
+      console.log(user_data);
+
+      document.getElementById(
+        "total_balance"
+      ).textContent = `RS ${user_data.balance}/-`;
+      document.getElementById(
+        "total_expense"
+      ).textContent = `Rs ${user_data.totalexpense}/-`;
+
+
+      function addincome() {
+        let incometype = document.getElementById("addincometype").value;
+        let incomeAmount = parseFloat(
+          document.getElementById("add_income_amount").value
+        );
+
+        if (incometype === "" || isNaN(incomeAmount) || incomeAmount <= 0) {
+          alert("Please fill all the details correctly");
+        } else {
+          let currentDateTime = new Date().toLocaleString();
+
+          user_data.balance =
+            (parseFloat(user_data.balance) || 0) + incomeAmount;
+          user_data.income = user_data.income || [];
+          user_data.income.push({
+            type: incometype,
+            amount: incomeAmount,
+            balance: user_data.balance,
+            dt: currentDateTime,
+          });
+
+          localStorage.setItem(key, JSON.stringify(user_data));
+
+          document.getElementById(
+            "total_balance"
+          ).textContent = `RS ${user_data.balance}/-`;
+          alert("added income successfully")
+        }
+      }
+      let incomeRows = user_data.income
+        .map(
+          (a) => `
+    <tr>
+        <td>${a.type}</td>
+        <td><span style="color:green;font:weight:900;padding-left:40px">+</span>${a.amount}</td>
+        <td><span style="padding-left:30px">${a.balance}</span></td>
+        <td><span style="font-size:14px;font-weight:900">${a.dt}</span></td>
+    </tr>
+`
+        )
+        .join(""); // Join the array into a single string
+
+      income_table.innerHTML = incomeRows;
+
+
+
+      function addexpense() {
+        let expenseAmount = parseFloat(
+          document.getElementById("add_expense_amount").value
+        );
+        let expensetype = document.getElementById("addexpensetype").value;
+        if (expensetype == "" || isNaN(expenseAmount)) {
+          alert("please fill all the fields");
+        } else if (user_data.balance < expenseAmount) {
+          alert("insufficient balance");
+        } else {
+          let currentDateTime = new Date().toLocaleString();
+
+          user_data.totalexpense =
+            (parseFloat(user_data.totalexpense) || 0) + expenseAmount;
+          user_data.balance = parseFloat(user_data.balance) - expenseAmount;
+
+          user_data.expense = user_data.expense || [];
+          user_data.expense.push({
+            type: expensetype,
+            amount: expenseAmount,
+            balance: user_data.balance,
+            dt: currentDateTime,
+          });
+          document.getElementById(
+            "total_balance"
+          ).textContent = `RS ${user_data.balance}/-`;
+          localStorage.setItem(key, JSON.stringify(user_data));
+          document.getElementById(
+            "total_expense"
+          ).textContent = `Rs ${user_data.totalexpense}/-`;
+            alert("added expense successfully")
+        }
+      }
+      let expenserows = user_data.expense
+        .map(
+          (a) => `
+    <tr>
+        <td>${a.type}</td>
+        <td><span style="color:red;padding-left:40px;font-weight:900">-</span>${a.amount}</td>
+        <td><span style="padding-left:30px;">${a.balance}</span></td>
+        <td><span style="font-size:14px;font-weight:900">${a.dt}</span></td>
+    </tr>
+`
+        )
+        .join(""); // Join the array into a single string
+
+      expense_table.innerHTML = expenserows;
+      function displaychart() {
+    // Aggregate expenses by type
+    let expenseTypes = {};
+    user_data.expense.forEach(exp => {
+        if (expenseTypes[exp.type]) {
+            expenseTypes[exp.type] += exp.amount;
+        } else {
+            expenseTypes[exp.type] = exp.amount;
+        }
+    });
+
+    // Prepare data for the chart
+    let labels = Object.keys(expenseTypes);
+    let data = Object.values(expenseTypes);
+
+    // Calculate the total expenses
+    let totalExpenses = data.reduce((acc, amount) => acc + amount, 0);
+
+    // Calculate the remaining balance
+    let remainingBalance = user_data.balance;
+
+    // Add the remaining balance to the chart data
+    labels.push('Remaining Balance');
+    data.push(remainingBalance);
+
+    // Get the pie chart canvas
+    let ctx = document.getElementById('piechart').getContext('2d');
+
+    // Create a new chart instance
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Expenses and Balance',
+                data: data,
+               backgroundColor: [
+    'rgba(255, 69, 100)',    // Brighter red
+    'rgba(75, 192, 255)',    // Brighter blue
+    'rgba(255, 235, 59)',    // Brighter yellow
+    'rgba(100, 255, 218)',   // Brighter cyan
+    'rgba(178, 102, 255)',   // Brighter purple
+    'rgba(255, 183, 77)',    // Brighter orange
+    'rgba(220, 220, 220)',   // Brighter grey
+    'rgba(144, 238, 144)'    // Brighter green for remaining balance
+],
+                borderColor: [
+                    'rgba(255, 255, 255, 1)',
+                    'rgba(255, 255, 255, 1)',
+                    'rgba(255, 255, 255, 1)',
+                    'rgba(255, 255, 255, 1)',
+                    'rgba(255, 255, 255, 1)',
+                    'rgba(255, 255, 255, 1)',
+                    'rgba(255, 255, 255, 1)',
+                    'rgba(255, 255, 255, 1)' // Darker green for remaining balance
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return `${labels[tooltipItem.dataIndex]}: Rs ${data[tooltipItem.dataIndex].toLocaleString()}/-`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+function clearall() {
+  if (confirm("Are you sure you want to clear your data?")) {
+
+
+    user_data.balance = 0;
+    user_data.totalexpense = 0;
+    user_data.expense = [];
+    user_data.income = [];
+
+  
+    localStorage.setItem(key, JSON.stringify(user_data));
+
+    document.getElementById("total_balance").textContent = `RS 0/-`;
+    document.getElementById("total_expense").textContent = `Rs 0/-`;
+    income_table.innerHTML = ""; 
+    expense_table.innerHTML = ""; 
+  }
+  alert("cleared data successfully")
+}
+
+const nameElement = document.getElementById("name");
+
+if (nameElement) {
+    nameElement.innerHTML = `<i class="fa-solid fa-user-tie fa-bounce"></i> WELCOME ${key}`;
+    nameElement.classList.add("fade-in");
+} else {
+    console.error("Element with ID 'name' not found.");
+}
+
+function logout(){
+  localStorage.removeItem("username")
+  window.location="./login.html"
+}
+
+    </script>
+  </body>
+</html>
